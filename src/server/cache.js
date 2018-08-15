@@ -27,3 +27,30 @@ module.exports.users.set('sample@example.com', {
     country: 'France'
   }
 });
+
+module.exports.users.set('lonkar.yogeshr@gmail.com', {
+  email: 'lonkar.yogeshr@gmail.com',
+  name: 'Yogesh Lonkar',
+  address: {
+    line1: 'Something somthing',
+    zip: '910114',
+    city: 'Pune',
+    state: 'MH',
+    country: 'India'
+  }
+});
+
+module.exports.books.set('The Power of your Subconscious Mind', {
+  name: 'The Power of your Subconscious Mind',
+  pages: 312
+});
+
+module.exports.books.set('Word Power Made Easy', {
+  name: 'Word Power Made Easy',
+  pages: 686
+});
+
+module.exports.books.set('The Alchemist', {
+  name: 'The Alchemist',
+  pages: 172
+});

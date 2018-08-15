@@ -45,7 +45,7 @@ router.get('/:book', (req, res) => {
 
 router.post('/:book', (req, res) => {
   const validatorResult = validator.validate(req.body, bookSchema);
-  if (validatorResult.errors.length < 0) {
+  if (validatorResult.errors.length <= 0) {
     if (booksCache.get(req.params.book)) {
       res.status(204).send();
     } else {

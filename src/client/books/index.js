@@ -1,0 +1,183 @@
+import React from 'react';
+import _ from 'lodash';
+import { withRouter } from 'react-router-dom';
+import { Base64 } from 'js-base64';
+
+import BookList from './booklist';
+
+const emptyBook = {
+  name: '',
+  pages: 1
+};
+
+const Alert = ({ message, type, dismiss }) => (
+  <div>
+    <div className={`alert alert-${type} alert-dismissible fade show`} role="alert">
+      <button type="button" className="close" onClick={dismiss} data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      {message}
+    </div>
+  </div>
+);
+
+class BooksPage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      books: [],
+      alert: {},
+      book: _.cloneDeep(emptyBook)
+    };
+  }
+
+  componentDidMount = () => {
+    this.fetchBooks();
+    const { match } = this.props;
+    if (match.params.book) {
+      this.fetchBook(Base64.decode(match.params.book));
+    }
+  }
+
+  componentDidUpdate = (prevProps) => {
+    const { match } = this.props;
+    const oldEmail = _.get(prevProps, 'match.params.book', undefined);
+    if (match.params.book && oldEmail !== match.params.book) {
+      this.fetchBook(Base64.decode(match.params.book));
+    }
+  }
+
+  fetchBook = (bookName) => {
+    (async () => {
+      const rawResponse = await fetch(`/api/books/${bookName}`, {
+        method: 'GET',
+        headers: { Accept: 'application/json', }
+      });
+      if (rawResponse.status >= 400) {
+        const message = (
+          <div>
+            <strong>Something went wrong! </strong>
+            while fetching book
+            {bookName}
+            .
+          </div>
+        );
+        this.setState({ alert: { message, type: 'danger' } });
+      } else {
+        let book = await rawResponse.json();
+        book = _.merge(_.cloneDeep(emptyBook), book);
+        this.setState({ book });
+      }
+    })();
+  }
+
+  fetchBooks = () => {
+    (async () => {
+      const rawResponse = await fetch('/api/books/', {
+        method: 'GET',
+        headers: { Accept: 'application/json', }
+      });
+      if (rawResponse.status >= 400) {
+        const message = (
+          <div>
+            <strong>Something went wrong! </strong>
+            while fetching books.
+          </div>
+        );
+        this.setState({ alert: { message, type: 'danger' } });
+      } else {
+        const books = await rawResponse.json();
+        this.setState({ books });
+      }
+    })();
+  }
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const form = document.getElementById('book-form');
+    const isValid = form.checkValidity();
+    form.classList.add('was-validated');
+    if (isValid) {
+      this.postBook();
+    }
+  }
+
+  postBook = () => {
+    const { book } = this.state;
+    (async () => {
+      const rawResponse = await fetch(`/api/books/${book.name}`, {
+        method: 'POST',
+        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify(book)
+      });
+      if (rawResponse.status >= 400) {
+        const message = (
+          <div>
+            <strong>Something went wrong! </strong>
+            while adding/updating book.
+          </div>
+        );
+        this.setState({ alert: { message, type: 'danger' } });
+      } else {
+        this.setState({ book: _.cloneDeep(emptyBook), alert: { message: 'Book is added/updated successfully.', type: 'success' } },
+          () => {
+            const { history } = this.props;
+            history.push('/books');
+            this.fetchBooks();
+            document.getElementById('book-form').classList.remove('was-validated');
+          });
+      }
+    })();
+  }
+
+  handleChange = (event) => {
+    const value = event.target.type === 'number' ? parseInt(event.target.value, 10) : event.target.value;
+    const book = _.set(this.state, event.target.name, value);
+    this.setState(book);
+  }
+
+  dismissAlert = () => {
+    setTimeout(() => this.setState({ alert: {} }), 1000);
+  }
+
+  render = () => {
+    const { book, alert, books } = this.state;
+    return (
+      <div className="container books-page">
+        <div className="row justify-content-start">
+          {alert.message ? <Alert {...alert} dismiss={this.dismissAlert} /> : ''}
+          <div className="col col-md-12">
+            <h1 className="display-6">Manage books</h1>
+          </div>
+        </div>
+        <div className="row justify-content-start">
+          <form className="col col-md-12" onSubmit={this.handleSubmit} id="book-form" noValidate>
+            <div className="form-group">
+              <label htmlFor="name">Book name</label>
+              <input value={book.name} onChange={this.handleChange} required type="text" className="form-control" id="name" name="book.name" placeholder="Lorem Ipsum" />
+              <div className="invalid-feedback">
+                Please provide book name.
+              </div>
+            </div>
+            <div className="form-group">
+              <label htmlFor="pages">Number of pages</label>
+              <input value={book.pages} onChange={this.handleChange} required min="1" step="1" type="number" className="form-control" id="pages" name="book.pages" />
+              <div className="invalid-feedback">
+                Please provide number of pages.
+              </div>
+            </div>
+            <button type="submit" className="btn btn-primary">Submit</button>
+          </form>
+        </div>
+        <div className="row justify-content-start">
+          <div className="col col-md-12 pt-5">
+            <BookList books={books} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+export default withRouter(BooksPage);

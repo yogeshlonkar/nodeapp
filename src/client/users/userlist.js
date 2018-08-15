@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import { Base64 } from 'js-base64';
 
 class UserList extends React.Component {
   static propTypes = {
@@ -47,7 +48,7 @@ class UserList extends React.Component {
     const { history } = this.props;
     let { users } = this.props;
     users = users.map((user, index) => (
-      <tr key={user.email} style={{ cursor: 'pointer' }} onClick={() => history.push(`/users/${user.email}`)}>
+      <tr key={user.email} style={{ cursor: 'pointer' }} onClick={() => history.push(`/users/${Base64.encode(user.email)}`)}>
         <th scope="row">{index + 1}</th>
         <td>{user.email}</td>
         <td>{user.name}</td>

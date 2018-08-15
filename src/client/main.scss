@@ -6,3 +6,18 @@ body {
     right: 0;
     z-index: 999;
 }
+::-webkit-input-placeholder {
+    color:#cecece !important;
+}
+
+::-moz-placeholder {
+    color:#cecece !important;
+}
+
+::-ms-placeholder {
+    color:#cecece !important;
+}
+
+::placeholder {
+    color:#cecece !important;
+}

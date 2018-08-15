@@ -1,43 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
-  BrowserRouter as Router, Route, Link, withRouter
+  BrowserRouter as Router, Route, withRouter
 } from 'react-router-dom';
 import 'babel-polyfill';
 import 'jquery';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import 'bootstrap/scss/bootstrap.scss';
-import 'font-awesome/css/font-awesome.css';
+import { library } from '@fortawesome/fontawesome';
+import { fab } from '@fortawesome/free-brands-svg-icons';
+import { faStroopwafel } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/fontawesome-free-solid';
+
 import App from './App';
 import UsersPage from './users';
+import BooksPage from './books';
 import './main.scss';
 
 import Navigation from './navigation';
 
-const Topic = ({ match }) => (
-  <div>
-    <h3>{match.params.topicId}</h3>
-  </div>
-);
-
-const Topics = ({ match }) => (
-  <div>
-    <h2>Topics</h2>
-    <ul>
-      <li>
-        <Link to={`${match.url}/rendering`}>Rendering with React</Link>
-      </li>
-      <li>
-        <Link to={`${match.url}/components`}>Components</Link>
-      </li>
-      <li>
-        <Link to={`${match.url}/props-v-state`}>Props v. State</Link>
-      </li>
-    </ul>
-    <Route path={`${match.url}/:topicId`} component={Topic} />
-    <Route exact path={match.url} render={() => <h3>Please select a topic.</h3>} />
-  </div>
-);
+library.add(faStroopwafel, faUser, fab);
 
 const BasicExample = () => {
   const NavigationBar = withRouter(props => <Navigation {...props} />);
@@ -47,7 +29,7 @@ const BasicExample = () => {
         <NavigationBar />
         <Route exact path="/" component={App} />
         <Route path="/users/:email?" component={UsersPage} />
-        <Route path="/topics" component={Topics} />
+        <Route path="/books/:book?" component={BooksPage} />
       </div>
     </Router>
   );
