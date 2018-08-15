@@ -21,4 +21,5 @@ app.get('*', (request, response) => {
   response.sendFile(path.resolve('dist', 'index.html'));
 });
 
-app.listen(8080, () => console.log('Listening on port 8080!'));
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => console.info(`Listening on port ${PORT} !`));
