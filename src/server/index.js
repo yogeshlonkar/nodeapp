@@ -8,7 +8,7 @@ const booksRoute = require('./routes/books');
 const app = express();
 
 app.use(express.static('dist'));
-app.use(bodyParser.json({ type: 'application/*+json' }));
+app.use(bodyParser.json());
 app.use('/api/users', usersRoute);
 app.use('/api/books', booksRoute);
 app.get('/api/packages', (req, res) => {

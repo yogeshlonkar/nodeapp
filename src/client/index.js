@@ -3,12 +3,14 @@ import ReactDOM from 'react-dom';
 import {
   BrowserRouter as Router, Route, Link, withRouter
 } from 'react-router-dom';
+import 'babel-polyfill';
 import 'jquery';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import 'bootstrap/scss/bootstrap.scss';
 import 'font-awesome/css/font-awesome.css';
 import App from './App';
 import UsersPage from './users';
+import './main.scss';
 
 import Navigation from './navigation';
 
@@ -44,7 +46,7 @@ const BasicExample = () => {
       <div>
         <NavigationBar />
         <Route exact path="/" component={App} />
-        <Route path="/users" component={UsersPage} />
+        <Route path="/users/:email?" component={UsersPage} />
         <Route path="/topics" component={Topics} />
       </div>
     </Router>

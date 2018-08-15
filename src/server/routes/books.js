@@ -27,7 +27,7 @@ router.get('/', (req, res) => {
 });
 
 router.head('/:book', (req, res) => {
-  if (booksCache.get(req.param.book)) {
+  if (booksCache.get(req.params.book)) {
     res.send('OK');
   } else {
     res.status(404).send();
@@ -35,7 +35,7 @@ router.head('/:book', (req, res) => {
 });
 
 router.get('/:book', (req, res) => {
-  const book = booksCache.get(req.param.book);
+  const book = booksCache.get(req.params.book);
   if (book) {
     res.send(book);
   } else {
@@ -46,12 +46,12 @@ router.get('/:book', (req, res) => {
 router.post('/:book', (req, res) => {
   const validatorResult = validator.validate(req.body, bookSchema);
   if (validatorResult.errors.length < 0) {
-    if (booksCache.get(req.param.book)) {
+    if (booksCache.get(req.params.book)) {
       res.status(204).send();
     } else {
       res.status(201).send();
     }
-    booksCache.set(req.param.book, req.body);
+    booksCache.set(req.params.book, req.body);
   } else {
     res.status(400).send(validatorResult.errors);
   }

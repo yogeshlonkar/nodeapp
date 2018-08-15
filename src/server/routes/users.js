@@ -22,12 +22,11 @@ const addressSchema = {
   id: '/address',
   type: 'object',
   properties: {
-    lines: {
-      type: 'array',
-      items: { type: 'string' }
-    },
+    line1: { type: 'string' },
+    line2: { type: 'string' },
     zip: { type: 'string' },
     city: { type: 'string' },
+    state: { type: 'string' },
     country: { type: 'string' }
   },
   required: ['country']
@@ -41,7 +40,7 @@ router.get('/', (req, res) => {
 });
 
 router.head('/:userEmail', (req, res) => {
-  if (userCache.get(req.param.userEmail)) {
+  if (userCache.get(req.params.userEmail)) {
     res.send('OK');
   } else {
     res.status(404).send();
@@ -49,7 +48,7 @@ router.head('/:userEmail', (req, res) => {
 });
 
 router.get('/:userEmail', (req, res) => {
-  const user = userCache.get(req.param.userEmail);
+  const user = userCache.get(req.params.userEmail);
   if (user) {
     res.send(user);
   } else {
@@ -58,14 +57,15 @@ router.get('/:userEmail', (req, res) => {
 });
 
 router.post('/:userEmail', (req, res) => {
+  console.info(req.params);
   const validatorResult = validator.validate(req.body, userSchema);
-  if (validatorResult.errors.length < 0) {
-    if (userCache.get(req.param.userEmail)) {
+  if (validatorResult.errors.length <= 0) {
+    if (userCache.get(req.params.userEmail)) {
       res.status(204).send();
     } else {
       res.status(201).send();
     }
-    userCache.set(req.param.userEmail, req.body);
+    userCache.set(req.params.userEmail, req.body);
   } else {
     res.status(400).send(validatorResult.errors);
   }
