@@ -2,10 +2,11 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 
 const outputDirectory = 'dist';
-
-module.exports = {
+const config = {
   entry: './src/client/index.js',
   output: {
     path: path.join(__dirname, outputDirectory),
@@ -46,9 +47,28 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin([outputDirectory]),
-    new FaviconsWebpackPlugin('./public/yogi.jpg'),
+    new FaviconsWebpackPlugin({
+      logo: './public/yogi.jpg',
+      icons: {
+        android: false,
+        appleIcon: false,
+        appleStartup: false,
+        coast: false,
+        favicons: true,
+        firefox: false,
+        windows: false,
+        yandex: false
+      }
+    }),
     new HtmlWebpackPlugin({
       template: './public/index.html'
     })
   ]
 };
+
+if (process.env.NODE_ENV === 'production') {
+  config.plugins.push(new UglifyJSPlugin());
+  config.plugins.push(new CompressionPlugin());
+}
+
+module.exports = config;
