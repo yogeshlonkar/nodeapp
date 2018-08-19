@@ -1,6 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import { withRouter } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import { Base64 } from 'js-base64';
 
 import BookList from './booklist';
@@ -32,8 +33,9 @@ class BooksPage extends React.Component {
   }
 
   componentDidMount = () => {
+    const { match, routeHeader } = this.props;
+    routeHeader(<h2 className="mb-0">Manage books</h2>);
     this.fetchBooks();
-    const { match } = this.props;
     if (match.params.book) {
       this.fetchBook(Base64.decode(match.params.book));
     }
@@ -145,11 +147,12 @@ class BooksPage extends React.Component {
     const { book, alert, books } = this.state;
     return (
       <div className="container books-page">
+        <Helmet>
+          <title>Books</title>
+          <meta name="description" content="Manager books" />
+        </Helmet>
         <div className="row justify-content-start">
           {alert.message ? <Alert {...alert} dismiss={this.dismissAlert} /> : ''}
-          <div className="col col-md-12">
-            <h1 className="display-6">Manage books</h1>
-          </div>
         </div>
         <div className="row justify-content-start">
           <form className="col col-md-12" onSubmit={this.handleSubmit} id="book-form" noValidate>

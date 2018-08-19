@@ -13,7 +13,7 @@ const PackageList = ({ dependencies, heading, className }) => {
     </li>
   ));
   return (
-    <div className={className}>
+    <div style={{ flexGrow: 2 }} className={className}>
       <h1 className="text-secondary">{heading}</h1>
       <ul className="list-group">
         {packages}
@@ -53,6 +53,8 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
+    const { routeHeader } = this.props;
+    routeHeader(<h2 className="mb-0">Sample single page application</h2>);
     fetch('/api/packages')
       .then((response) => {
         if (response.status >= 400) {
@@ -69,7 +71,6 @@ class Home extends React.Component {
       <div className="container home-section">
         <div className="row justify-content-start">
           <div className="col col-sm-12">
-            <h1 className="display-3">Sample single page application</h1>
             <p>
               This is sample SPA writtern using below packages.
               <a href="https://github.com/yogeshlonkar/nodeapp">
@@ -78,10 +79,9 @@ class Home extends React.Component {
             </p>
           </div>
           <Scripts className="col col-sm-12" scripts={packageJson.scripts} />
-          <div className="col col-sm-12">&nbsp;</div>
-          <div className="col col-sm-12 d-flex">
+          <div className="mt-3 col col-sm-12 d-flex flex-wrap align-content-start">
             <PackageList dependencies={packageJson.dependencies} heading="Dependencies" />
-            <PackageList className="ml-5" dependencies={packageJson.devDependencies} heading="Dev Dependencies" />
+            <PackageList className="devDependencies" dependencies={packageJson.devDependencies} heading="Dev Dependencies" />
           </div>
         </div>
       </div>

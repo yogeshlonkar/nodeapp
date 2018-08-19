@@ -3,6 +3,7 @@ import _ from 'lodash';
 import omitEmpty from 'omit-empty';
 import { withRouter } from 'react-router-dom';
 import { Base64 } from 'js-base64';
+import { Helmet } from 'react-helmet';
 import './users.scss';
 import UserList from './userlist';
 
@@ -41,8 +42,9 @@ class UsersPage extends React.Component {
   }
 
   componentDidMount = () => {
+    const { match, routeHeader } = this.props;
     this.fetchUsers();
-    const { match } = this.props;
+    routeHeader(<h2 className="mb-0">Manage users</h2>);
     if (match.params.email) {
       this.fetchUser(Base64.decode(match.params.email));
     }
@@ -154,11 +156,12 @@ class UsersPage extends React.Component {
     const { user, alert, users } = this.state;
     return (
       <div className="container users-page">
+        <Helmet>
+          <title>Users</title>
+          <meta name="description" content="Manager users" />
+        </Helmet>
         <div className="row justify-content-start">
           {alert.message ? <Alert {...alert} dismiss={this.dismissAlert} /> : ''}
-          <div className="col col-md-12">
-            <h1 className="display-6">Manage users</h1>
-          </div>
         </div>
         <div className="row justify-content-start">
           <form className="col col-md-12" onSubmit={this.handleSubmit} id="user-form" noValidate>
