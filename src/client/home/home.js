@@ -1,6 +1,11 @@
 import React from 'react';
+import { library } from '@fortawesome/fontawesome';
+import { fab } from '@fortawesome/free-brands-svg-icons';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import './app.scss';
+import './home.scss';
+
+library.add(fab);
 
 const PackageList = ({ dependencies, heading, className }) => {
   if (!dependencies) {

@@ -1,6 +1,10 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import { library } from '@fortawesome/fontawesome';
+import far from '@fortawesome/fontawesome-free-regular';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+library.add(far);
 
 const PageNotFound = () => (
   <div style={{ minHeight: '80vh' }} className="d-flex justify-content-center align-items-center flex-column">

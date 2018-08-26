@@ -4,15 +4,24 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const outputDirectory = 'dist';
 const config = {
-  entry: './src/client/index.js',
+  entry: {
+    main: './src/client/index.js',
+    vendor: ['react', 'lodash/core']
+  },
   output: {
     path: path.join(__dirname, outputDirectory),
-    filename: 'bundle.js',
+    filename: '[name].bundle.js',
     chunkFilename: '[name].chunk.js',
     publicPath: '/'
+  },
+  resolve: {
+    alias: {
+      Components: path.resolve(__dirname, 'src/client/components')
+    }
   },
   module: {
     rules: [
@@ -69,6 +78,32 @@ const config = {
 if (process.env.NODE_ENV === 'production') {
   config.plugins.push(new UglifyJSPlugin());
   config.plugins.push(new CompressionPlugin());
+  config.plugins.push(new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: false }));
+  config.optimization = {
+    splitChunks: {
+      chunks: 'async',
+      minSize: 30000,
+      maxSize: 0,
+      minChunks: 1,
+      maxAsyncRequests: 5,
+      maxInitialRequests: 3,
+      automaticNameDelimiter: '~',
+      name: true,
+      cacheGroups: {
+        vendors: {
+          chunks: 'initial',
+          name: 'vendor',
+          test: 'vendor',
+          enforce: true
+        },
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true
+        }
+      }
+    }
+  };
 }
 
 module.exports = config;

@@ -27,3 +27,6 @@ body {
   align-items: stretch;
   perspective: 1500px;
 }
+.main-section {
+    min-height: calc(100vh - 80px);
+}

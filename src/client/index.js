@@ -5,24 +5,16 @@ import {
 } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import 'babel-polyfill';
-import 'jquery';
+import 'jquery/dist/jquery.slim';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import 'bootstrap/scss/bootstrap.scss';
-import { library } from '@fortawesome/fontawesome';
-import { fab } from '@fortawesome/free-brands-svg-icons';
-import { faStroopwafel } from '@fortawesome/free-solid-svg-icons';
-import { faUser } from '@fortawesome/fontawesome-free-solid';
-import far from '@fortawesome/fontawesome-free-regular';
 
-import App from './App';
+import Home from './home';
 import UsersPage from './users';
 import BooksPage from './books';
 import './main.scss';
 import SideBar, { SidebarToggle } from './components/sidebar';
-import PageNotFound from './components/pagenotfound';
-
-library.add(faStroopwafel, faUser, fab, far);
-
+import NotFound from './notfound';
 
 class BasicExample extends React.Component {
   constructor(props) {
@@ -32,8 +24,11 @@ class BasicExample extends React.Component {
     };
   }
 
+  componentDidMount = () => {
+    NProgress.done();
+  }
+
   setHeader = (header1) => {
-    console.info('header ->', header1);
     this.setState({ header: header1 });
   }
 
@@ -53,12 +48,14 @@ class BasicExample extends React.Component {
                 {header}
               </div>
             </nav>
-            <Switch>
-              <Route exact path="/" render={props => <App {...props} routeHeader={this.setHeader} />} />
-              <Route path="/users/:email?" render={props => <UsersPage {...props} routeHeader={this.setHeader} />} />
-              <Route path="/books/:book?" render={props => <BooksPage {...props} routeHeader={this.setHeader} />} />
-              <Route render={props => <PageNotFound {...props} routeHeader={this.setHeader} />} />
-            </Switch>
+            <div className="main-section d-flex justify-content-center align-items-center">
+              <Switch>
+                <Route exact path="/" render={props => <Home {...props} routeHeader={this.setHeader} />} />
+                <Route path="/users/:email?" render={props => <UsersPage {...props} routeHeader={this.setHeader} />} />
+                <Route path="/books/:book?" render={props => <BooksPage {...props} routeHeader={this.setHeader} />} />
+                <Route render={props => <NotFound {...props} routeHeader={this.setHeader} />} />
+              </Switch>
+            </div>
             <footer className="mt-2 text-center font-weight-light">
               some awesome footer with copyright and privacy declaration.
             </footer>
