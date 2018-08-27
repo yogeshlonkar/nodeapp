@@ -4,7 +4,6 @@
     "allowSyntheticDefaultImports": false,
     "baseUrl": "./",
     "paths": {
-      "Components/*": ["src/client/components/*"]
     }
   },
   "exclude": ["node_modules", "dist"]
