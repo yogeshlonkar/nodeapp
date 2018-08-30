@@ -6,10 +6,10 @@ ENV PORT=${PORT}
 EXPOSE ${PORT}
 
 RUN mkdir -p /usr/local/nodeapp
+WORKDIR /usr/local/nodeapp
 ADD package.json /usr/local/nodeapp
 RUN npm install
 ADD . /usr/local/nodeapp
-WORKDIR /usr/local/nodeapp
 RUN npm update
 
 CMD [ "npm", "start" ]
