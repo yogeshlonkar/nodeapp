@@ -6,10 +6,6 @@ For development
 ```shell
 npm run dev
 ```
-For webpack bundle (in /dist directory)
-```shell
-npm run build
-```
 
 ## Docker repository
 [`ylonkar/nodeapp`](https://hub.docker.com/r/ylonkar/nodeapp/)

@@ -1,6 +1,5 @@
 const express = require('express');
 const fs = require('fs');
-const path = require('path');
 const bodyParser = require('body-parser');
 const compression = require('compression');
 const usersRoute = require('./routes/users');
@@ -23,10 +22,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('*', (request, response) => {
+app.get('/', (req, res) => {
   // for react-router to work. always serve index.html
-  response.removeHeader('Content-Encoding');
-  response.sendFile(path.resolve('dist', 'index.html'));
+  res.send({ message: 'api is running successfully' });
 });
 
 const PORT = process.env.PORT || 8080;
