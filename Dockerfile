@@ -10,6 +10,6 @@ EXPOSE ${PORT}
 RUN mkdir -p /usr/local/nodeapp
 ADD . /usr/local/nodeapp
 WORKDIR /usr/local/nodeapp
-RUN npm install && npm run build
+RUN npm install
 
 CMD [ "npm", "start" ]
