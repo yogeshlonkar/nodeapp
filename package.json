@@ -4,8 +4,9 @@
   "description": "Nodejs application",
   "main": "src/index.js",
   "scripts": {
+    "postinstall": "link-module-alias",
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "source .env && nodemon --inspect src/index.js"
   },
   "repository": {
     "type": "git",
@@ -21,17 +22,23 @@
     "url": "https://github.com/yogeshlonkar/nodeapp/issues"
   },
   "homepage": "https://github.com/yogeshlonkar/nodeapp#readme",
+  "_moduleAliases": {
+    "root": ".",
+    "src": "src",
+    "dao": "src/dao"
+  },
   "dependencies": {
     "body-parser": "^1.18.3",
     "compression": "^1.7.3",
     "express": "^4.16.3",
     "jsonschema": "^1.2.4",
+    "link-module-alias": "^1.1.5",
+    "mongodb": "^3.1.4",
     "node-cache": "^4.2.0"
   },
   "devDependencies": {
     "eslint": "^5.3.0",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-import-resolver-webpack": "^0.10.1",
     "eslint-plugin-import": "^2.14.0",
     "nodemon": "^1.18.3"
   }

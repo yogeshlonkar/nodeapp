@@ -5,11 +5,14 @@ env:
   browser: true
   node: true
 parserOptions:
-  ecmaVersion: 6
-  ecmaFeatures:
-    experimentalObjectRestSpread: true
+  ecmaVersion: 8
 rules:
   no-console: 'off'
   comma-dangle: 'off'
+  global-require: 'off'
+  no-underscore-dangle: 'off'
+  max-len:
+   - 2
+   - 135
 globals:
   NProgress: true

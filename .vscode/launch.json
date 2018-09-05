@@ -7,8 +7,20 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
-            "program": "${workspaceFolder}/test.js"
+            "name": "dev",
+            "envFile": "${workspaceFolder}/.env",
+            "runtimeExecutable": "nodemon",
+            "program": "${workspaceRoot}/src/index.js",
+            "console": "integratedTerminal",
+            "restart": true
         }
+        // {
+        //     "type": "node",
+        //     "request": "attach",
+        //     "name": "debug",
+        //     "processId": "${command:PickProcess}",
+        //     "restart": true,
+        //     "protocol": "inspector"
+        // }
     ]
 }

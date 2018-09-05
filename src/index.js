@@ -6,7 +6,6 @@ const usersRoute = require('./routes/users');
 const booksRoute = require('./routes/books');
 
 const app = express();
-
 app.use(bodyParser.json());
 app.use(compression());
 app.use('/api/users', usersRoute);

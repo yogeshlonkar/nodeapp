@@ -1,54 +1,23 @@
 const express = require('express');
-const { Validator } = require('jsonschema');
-const { users: userCache } = require('../cache');
+const userApi = require('dao/userapi'); // eslint-disable-line import/no-extraneous-dependencies
 
 const router = express.Router();
-const validator = new Validator();
-const userSchema = {
-  id: '/user',
-  type: 'object',
-  properties: {
-    name: { type: 'string' },
-    email: {
-      type: 'string',
-      format: 'email'
-    },
-    address: { $ref: '/address' }
-  },
-  required: ['name', 'email', 'address']
-};
-// Address, to be embedded on user
-const addressSchema = {
-  id: '/address',
-  type: 'object',
-  properties: {
-    line1: { type: 'string' },
-    line2: { type: 'string' },
-    zip: { type: 'string' },
-    city: { type: 'string' },
-    state: { type: 'string' },
-    country: { type: 'string' }
-  },
-  required: ['country']
-};
 
-validator.addSchema(addressSchema, '/address');
-
-router.get('/', (req, res) => {
-  const users = userCache.keys().map(key => userCache.get(key));
+router.get('/', async (req, res) => {
+  const users = await userApi.getAll();
   res.send(users);
 });
 
-router.head('/:userEmail', (req, res) => {
-  if (userCache.get(req.params.userEmail)) {
+router.head('/:userEmail', async (req, res) => {
+  if (await userApi.hasByEmail(req.params.userEmail)) {
     res.send('OK');
   } else {
     res.status(404).send();
   }
 });
 
-router.get('/:userEmail', (req, res) => {
-  const user = userCache.get(req.params.userEmail);
+router.get('/:userEmail', async (req, res) => {
+  const user = await userApi.getByEmail(req.params.userEmail);
   if (user) {
     res.send(user);
   } else {
@@ -56,18 +25,27 @@ router.get('/:userEmail', (req, res) => {
   }
 });
 
-router.post('/:userEmail', (req, res) => {
-  console.info(req.params);
-  const validatorResult = validator.validate(req.body, userSchema);
-  if (validatorResult.errors.length <= 0) {
-    if (userCache.get(req.params.userEmail)) {
-      res.status(204).send();
+router.post('/:userEmail', async (req, res) => {
+  try {
+    const validatorResult = userApi.validate(req.body);
+    if (validatorResult.errors.length <= 0) {
+      const result = await userApi.save(req.body);
+      if (result.insertedCount === 0) {
+        res.status(201).send();
+      } else {
+        res.status(204).send();
+      }
     } else {
-      res.status(201).send();
+      res.status(400).send(validatorResult.errors);
     }
-    userCache.set(req.params.userEmail, req.body);
-  } else {
-    res.status(400).send(validatorResult.errors);
+  } catch (error) {
+    if (error.code === 11000) {
+      res
+        .status(400)
+        .send({ status: false, message: `User already exists with email ${req.params.userEmail}`, error: JSON.stringify(error) });
+    } else {
+      res.status(500).send({ status: false, message: 'Could not save/update user', error: JSON.stringify(error) });
+    }
   }
 });
 
