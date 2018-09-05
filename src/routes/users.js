@@ -1,15 +1,15 @@
 const express = require('express');
-const userApi = require('dao/userapi'); // eslint-disable-line import/no-extraneous-dependencies
+const userapi = require('dao/usersapi'); // eslint-disable-line import/no-extraneous-dependencies
 
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-  const users = await userApi.getAll();
+  const users = await userapi.getAll();
   res.send(users);
 });
 
 router.head('/:userEmail', async (req, res) => {
-  if (await userApi.hasByEmail(req.params.userEmail)) {
+  if (await userapi.hasByEmail(req.params.userEmail)) {
     res.send('OK');
   } else {
     res.status(404).send();
@@ -17,7 +17,7 @@ router.head('/:userEmail', async (req, res) => {
 });
 
 router.get('/:userEmail', async (req, res) => {
-  const user = await userApi.getByEmail(req.params.userEmail);
+  const user = await userapi.getByEmail(req.params.userEmail);
   if (user) {
     res.send(user);
   } else {
@@ -27,9 +27,9 @@ router.get('/:userEmail', async (req, res) => {
 
 router.post('/:userEmail', async (req, res) => {
   try {
-    const validatorResult = userApi.validate(req.body);
+    const validatorResult = userapi.validate(req.body);
     if (validatorResult.errors.length <= 0) {
-      const result = await userApi.save(req.body);
+      const result = await userapi.save(req.body);
       if (result.insertedCount === 0) {
         res.status(201).send();
       } else {

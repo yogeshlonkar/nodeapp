@@ -36,7 +36,7 @@ validator.addSchema(addressSchema, '/address');
 const userApi = {
 
   init: async () => {
-    const { db } = await require('./db');
+    const { db } = await require('dao/db');
     const collection = db.collection('users');
     // Insert some documents
     const existingUser = await collection.find({ email: 'lonkar.yogeshr@gmail.com' }, { _id: 1 }).limit(1).count();
@@ -87,7 +87,7 @@ const userApi = {
       if (validatorResult.errors.length > 0) {
         throw validatorResult;
       }
-      const { db } = await require('./db');
+      const { db } = await require('dao/db');
       const collection = db.collection('users');
       // Insert some documents
       let result;
@@ -106,21 +106,21 @@ const userApi = {
   }),
 
   hasByEmail: async (email) => {
-    const { db } = await require('./db');
+    const { db } = await require('dao/db');
     const collection = db.collection('users');
     // Insert some documents
     return await collection.findOne({ email }).count() > 0;
   },
 
   getByEmail: async (email) => {
-    const { db } = await require('./db');
+    const { db } = await require('dao/db');
     const collection = db.collection('users');
     // Insert some documents
     return collection.findOne({ email });
   },
 
   getAll: async () => {
-    const { db } = await require('./db');
+    const { db } = await require('dao/db');
     const collection = db.collection('users');
     // Insert some documents
     return collection.find({}).toArray();
