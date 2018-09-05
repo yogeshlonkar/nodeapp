@@ -8,16 +8,16 @@ router.get('/', async (req, res) => {
   res.send(books);
 });
 
-router.head('/:book', async (req, res) => {
-  if (await booksapi.hasByName(req.params.book)) {
+router.head('/:id', async (req, res) => {
+  if (await booksapi.hasById(req.params.id)) {
     res.send('OK');
   } else {
     res.status(404).send();
   }
 });
 
-router.get('/:book', async (req, res) => {
-  const book = await booksapi.getByName(req.params.book);
+router.get('/:id', async (req, res) => {
+  const book = await booksapi.getById(req.params.id);
   if (book) {
     res.send(book);
   } else {
@@ -25,7 +25,7 @@ router.get('/:book', async (req, res) => {
   }
 });
 
-router.post('/:book', async (req, res) => {
+router.post('/:id', async (req, res) => {
   try {
     const validatorResult = booksapi.validate(req.body);
     if (validatorResult.errors.length <= 0) {
@@ -42,7 +42,7 @@ router.post('/:book', async (req, res) => {
     if (error.code === 11000) {
       res
         .status(400)
-        .send({ status: false, message: `Book already exists with name ${req.params.book}`, error: JSON.stringify(error) });
+        .send({ status: false, message: `Book already exists with name ${req.body.name}`, error: JSON.stringify(error) });
     } else {
       res.status(500).send({ status: false, message: 'Could not save/update book', error: JSON.stringify(error) });
     }

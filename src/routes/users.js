@@ -8,16 +8,16 @@ router.get('/', async (req, res) => {
   res.send(users);
 });
 
-router.head('/:userEmail', async (req, res) => {
-  if (await userapi.hasByEmail(req.params.userEmail)) {
+router.head('/:id', async (req, res) => {
+  if (await userapi.hasById(req.params.id)) {
     res.send('OK');
   } else {
     res.status(404).send();
   }
 });
 
-router.get('/:userEmail', async (req, res) => {
-  const user = await userapi.getByEmail(req.params.userEmail);
+router.get('/:id', async (req, res) => {
+  const user = await userapi.getById(req.params.id);
   if (user) {
     res.send(user);
   } else {
@@ -25,7 +25,7 @@ router.get('/:userEmail', async (req, res) => {
   }
 });
 
-router.post('/:userEmail', async (req, res) => {
+router.post('/:id', async (req, res) => {
   try {
     const validatorResult = userapi.validate(req.body);
     if (validatorResult.errors.length <= 0) {
@@ -42,7 +42,7 @@ router.post('/:userEmail', async (req, res) => {
     if (error.code === 11000) {
       res
         .status(400)
-        .send({ status: false, message: `User already exists with email ${req.params.userEmail}`, error: JSON.stringify(error) });
+        .send({ status: false, message: `User already exists with email ${req.body.email}`, error: JSON.stringify(error) });
     } else {
       res.status(500).send({ status: false, message: 'Could not save/update user', error: JSON.stringify(error) });
     }

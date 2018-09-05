@@ -85,6 +85,20 @@ const bookApi = {
     return collection.findOne({ name });
   },
 
+  hasById: async (_id) => {
+    const { db } = await require('./db');
+    const collection = db.collection('books');
+    // Insert some documents
+    return await collection.findOne({ _id: ObjectID.createFromHexString(_id) }).count() > 0;
+  },
+
+  getById: async (_id) => {
+    const { db } = await require('./db');
+    const collection = db.collection('books');
+    // Insert some documents
+    return collection.findOne({ _id: ObjectID.createFromHexString(_id) });
+  },
+
   getAll: async () => {
     const { db } = await require('./db');
     const collection = db.collection('books');
