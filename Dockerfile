@@ -8,8 +8,8 @@ EXPOSE ${PORT}
 RUN mkdir -p /usr/local/nodeapp
 WORKDIR /usr/local/nodeapp
 ADD package.json /usr/local/nodeapp
-RUN npm install
+RUN npm install --unsafe-perm
 ADD . /usr/local/nodeapp
-RUN npm update
+RUN npm update --unsafe-perm
 
 CMD [ "npm", "start" ]
