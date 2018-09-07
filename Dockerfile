@@ -11,5 +11,6 @@ ADD package.json /usr/local/nodeapp
 RUN npm install --unsafe-perm
 ADD . /usr/local/nodeapp
 RUN npm update --unsafe-perm
+RUN npm run postinstall --unsafe-perm
 
 CMD [ "npm", "start" ]
