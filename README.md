@@ -16,7 +16,7 @@ npm run dev
 ### Tags
 - `latest`
 - `v1.0.0`
-- `1.1.0`
+- `2.0.0`
 
 ## Run
 Using docker
