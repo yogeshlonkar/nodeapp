@@ -9,7 +9,14 @@ npm run dev
 
 ## Docker repository
 [`ylonkar/nodeapp`](https://hub.docker.com/r/ylonkar/nodeapp/)
-- `latest` [Dockerfile](https://github.com/yogeshlonkar/nodeapp/blob/master/Dockerfile)
+
+[Dockerfile](https://github.com/yogeshlonkar/nodeapp/blob/master/Dockerfile)
+
+
+### Tags
+- `latest`
+- `v1.0.0`
+- `1.1.0`
 
 ## Run
 Using docker
