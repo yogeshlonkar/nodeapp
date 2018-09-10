@@ -25,7 +25,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/:id', async (req, res) => {
+router.post('/:id*?', async (req, res) => {
   try {
     const validatorResult = userapi.validate(req.body);
     if (validatorResult.errors.length <= 0) {
